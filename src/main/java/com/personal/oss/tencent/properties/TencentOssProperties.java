@@ -16,8 +16,6 @@ public class TencentOssProperties {
     private String region;
     private String accessKey;
     private String secretKey;
-    private String bucketName;
-    private String baseUrl;
 
     public boolean isEnable() {
         return enable;
@@ -49,21 +47,5 @@ public class TencentOssProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
-    }
-
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    public void setBucketName(String bucketName) {
-        this.bucketName = bucketName;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
     }
 }

@@ -3,6 +3,9 @@
  */
 package com.personal.oss.base;
 
+import com.personal.oss.properties.OssProperties;
+import com.personal.oss.utils.SpringUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +20,8 @@ public class BaseOssUtil {
     protected static final List<String> pdfFiles = Arrays.asList(".pdf");
     protected static final String PIC_CONTENT_TYPE = "image/jpg";
     protected static final String PDF_CONTENT_TYPE = "application/pdf";
+    protected static final OssProperties properties = SpringUtils.getBean(OssProperties.class);
+
     public static String getOssFileName(String folder, String fileType) {
         String type = ".".equals(fileType.substring(0, 1)) ? fileType : "." + fileType;
         return folder + "_" + System.currentTimeMillis() + type;

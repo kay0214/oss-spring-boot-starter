@@ -7,7 +7,6 @@ import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
-import com.personal.oss.aliyun.properties.AliyunOssProperties;
 import com.personal.oss.base.BaseOssUtil;
 import com.personal.oss.utils.SpringUtils;
 import org.slf4j.Logger;
@@ -29,7 +28,6 @@ import java.util.Date;
 public class AliyunOssUtil extends BaseOssUtil {
     private static final Logger log = LoggerFactory.getLogger(AliyunOssUtil.class);
     private static final OSS ossClient = SpringUtils.getBean(OSS.class);
-    private static final AliyunOssProperties properties = SpringUtils.getBean(AliyunOssProperties.class);
 
     public static void fileDownload(String fileKey, String fileDownloadPath) throws IOException {
         InputStream inputStream = ossClient.getObject(properties.getBucketName(), fileKey).getObjectContent();

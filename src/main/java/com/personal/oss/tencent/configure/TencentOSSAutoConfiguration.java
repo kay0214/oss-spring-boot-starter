@@ -3,6 +3,7 @@
  */
 package com.personal.oss.tencent.configure;
 
+import com.personal.oss.properties.OssProperties;
 import com.personal.oss.tencent.properties.TencentOssProperties;
 import com.personal.oss.utils.SpringUtils;
 import com.qcloud.cos.COSClient;
@@ -28,13 +29,13 @@ import org.springframework.util.StringUtils;
 // 引入SpringUtils,确保能用SpringUtils获取上下文
 @Import({SpringUtils.class})
 @ConditionalOnClass({COSClient.class})
-@EnableConfigurationProperties({TencentOssProperties.class})
+@EnableConfigurationProperties({OssProperties.class,TencentOssProperties.class})
 @ConditionalOnProperty(name = {"oss.tencent.enable"}, havingValue = "true")
 public class TencentOSSAutoConfiguration {
     private final TencentOssProperties tencentOssProperties;
 
-    public TencentOSSAutoConfiguration(TencentOssProperties tencentOssProperties) {
-        this.tencentOssProperties = tencentOssProperties;
+    public TencentOSSAutoConfiguration(OssProperties ossProperties) {
+        this.tencentOssProperties = ossProperties.getTencent();
     }
 
     @Bean

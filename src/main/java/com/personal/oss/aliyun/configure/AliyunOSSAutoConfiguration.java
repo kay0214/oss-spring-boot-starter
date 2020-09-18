@@ -6,6 +6,7 @@ package com.personal.oss.aliyun.configure;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.personal.oss.aliyun.properties.AliyunOssProperties;
+import com.personal.oss.properties.OssProperties;
 import com.personal.oss.utils.SpringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,13 +26,13 @@ import org.springframework.util.StringUtils;
 // 引入SpringUtils,确保能用SpringUtils获取上下文
 @Import({SpringUtils.class})
 @ConditionalOnClass({OSS.class})
-@EnableConfigurationProperties({AliyunOssProperties.class})
+@EnableConfigurationProperties({OssProperties.class,AliyunOssProperties.class})
 @ConditionalOnProperty(name = {"oss.aliyun.enable"}, havingValue = "true")
 public class AliyunOSSAutoConfiguration {
     private final AliyunOssProperties aliyunOssProperties;
 
-    public AliyunOSSAutoConfiguration(AliyunOssProperties aliyunOssProperties) {
-        this.aliyunOssProperties = aliyunOssProperties;
+    public AliyunOSSAutoConfiguration(OssProperties ossProperties) {
+        this.aliyunOssProperties = ossProperties.getAliyun();
     }
 
     @Bean

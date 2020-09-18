@@ -17,8 +17,6 @@ public class AliyunOssProperties {
     private String accessKey;
     private String secretKey;
     private String securityToken;
-    private String bucketName;
-    private String baseUrl;
 
     public boolean isEnable() {
         return enable;
@@ -58,21 +56,5 @@ public class AliyunOssProperties {
 
     public void setSecurityToken(String securityToken) {
         this.securityToken = securityToken;
-    }
-
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    public void setBucketName(String bucketName) {
-        this.bucketName = bucketName;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
     }
 }
