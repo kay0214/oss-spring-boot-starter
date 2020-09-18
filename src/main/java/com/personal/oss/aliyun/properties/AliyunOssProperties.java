@@ -12,13 +12,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties("oss.aliyun")
 public class AliyunOssProperties {
+    private boolean enable;
     private String endpoint;
     private String accessKey;
     private String secretKey;
     private String securityToken;
-    private boolean enable;
     private String bucketName;
     private String baseUrl;
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     public String getEndpoint() {
         return endpoint;
@@ -52,14 +60,6 @@ public class AliyunOssProperties {
         this.securityToken = securityToken;
     }
 
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
     public String getBucketName() {
         return bucketName;
     }
@@ -74,18 +74,5 @@ public class AliyunOssProperties {
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
-    }
-
-    @Override
-    public String toString() {
-        return "AliyunOssProperties{" +
-                "endpoint='" + endpoint + '\'' +
-                ", accessKey='" + accessKey + '\'' +
-                ", secretKey='" + secretKey + '\'' +
-                ", securityToken='" + securityToken + '\'' +
-                ", enable=" + enable +
-                ", bucketName='" + bucketName + '\'' +
-                ", baseUrl='" + baseUrl + '\'' +
-                '}';
     }
 }

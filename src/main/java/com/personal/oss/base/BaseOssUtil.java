@@ -31,7 +31,7 @@ public class BaseOssUtil {
         }
 
         if ("/".equals(firstChar)) {
-            path = path.substring(1, path.length());
+            path = path.substring(1);
         }
 
         System.out.println(path);
