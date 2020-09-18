@@ -1,6 +1,6 @@
 HELP.md
 /.idea/*
-*/target/
+target/
 *.project
 *.classpath
 *.settings

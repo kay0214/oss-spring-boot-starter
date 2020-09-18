@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
 @Import({SpringUtils.class})
 @ConditionalOnClass({OSS.class})
 @EnableConfigurationProperties({AliyunOssProperties.class})
-@ConditionalOnProperty(name = {"oss.aliyun.enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = {"oss.aliyun.enable"}, havingValue = "true")
 public class AliyunOSSAutoConfiguration {
     private final AliyunOssProperties aliyunOssProperties;
 

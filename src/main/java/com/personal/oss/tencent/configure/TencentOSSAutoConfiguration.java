@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 @Import({SpringUtils.class})
 @ConditionalOnClass({COSClient.class})
 @EnableConfigurationProperties({TencentOssProperties.class})
-@ConditionalOnProperty(name = {"oss.tencent.enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = {"oss.tencent.enable"}, havingValue = "true")
 public class TencentOSSAutoConfiguration {
     private final TencentOssProperties tencentOssProperties;
 
