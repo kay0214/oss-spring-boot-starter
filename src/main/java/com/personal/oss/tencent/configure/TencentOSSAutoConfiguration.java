@@ -3,6 +3,7 @@
  */
 package com.personal.oss.tencent.configure;
 
+import com.personal.oss.base.BaseConfiguration;
 import com.personal.oss.base.OssFactory;
 import com.personal.oss.enums.OssCompanyEnum;
 import com.personal.oss.properties.OssProperties;
@@ -33,7 +34,7 @@ import org.springframework.util.StringUtils;
 @ConditionalOnClass({COSClient.class})
 @EnableConfigurationProperties({OssProperties.class,TencentOssProperties.class})
 @ConditionalOnProperty(name = {"oss.tencent.enable"}, havingValue = "true")
-public class TencentOSSAutoConfiguration {
+public class TencentOSSAutoConfiguration extends BaseConfiguration {
     private final TencentOssProperties tencentOssProperties;
 
     public TencentOSSAutoConfiguration(OssProperties ossProperties) {
@@ -45,8 +46,7 @@ public class TencentOSSAutoConfiguration {
         Assert.isTrue(!StringUtils.isEmpty(this.tencentOssProperties.getRegion()), "region can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.tencentOssProperties.getAccessKey()), "Access key can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.tencentOssProperties.getSecretKey()), "Secret key can't be empty.");
-        OssFactory.checkSingleton();
-        OssFactory.thisCompany = OssCompanyEnum.TENCENT;
+        super.checkAndSwitch(OssCompanyEnum.TENCENT);
         COSCredentials credentials = new BasicCOSCredentials(this.tencentOssProperties.getAccessKey(), this.tencentOssProperties.getSecretKey());
         Region region = new Region(this.tencentOssProperties.getRegion());
         ClientConfig config = new ClientConfig(region);

@@ -15,7 +15,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("oss")
 public class OssProperties {
     private String bucketName;
-    private String baseUrl;
+    private String domain;
     private AliyunOssProperties aliyun;
     private TencentOssProperties tencent;
 
@@ -27,12 +27,12 @@ public class OssProperties {
         this.bucketName = bucketName;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public String getDomain() {
+        return domain;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public AliyunOssProperties getAliyun() {

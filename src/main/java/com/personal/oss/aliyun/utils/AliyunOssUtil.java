@@ -8,6 +8,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.personal.oss.base.OssBase;
+import com.personal.oss.base.OssInterface;
 import com.personal.oss.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Date;
 
 /**
@@ -25,7 +24,7 @@ import java.util.Date;
  * @version AliyunOssUtil, v0.1 2020/9/18 09:40
  * @description
  */
-public class AliyunOssUtil extends OssBase {
+public class AliyunOssUtil extends OssBase implements OssInterface {
     private static final Logger log = LoggerFactory.getLogger(AliyunOssUtil.class);
     private static final OSS ossClient = SpringUtils.getBean(OSS.class);
 
@@ -36,40 +35,226 @@ public class AliyunOssUtil extends OssBase {
         ossClient.shutdown();
     }
 
-    public static String fileUpload(MultipartFile file, String folder) {
-        String originalFilename = file.getOriginalFilename();
-        String fileType = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
-        if (!StringUtils.isEmpty(originalFilename) && typeFiles.contains(fileType)) {
-            String retFileName = getOssFileName(folder, fileType);
-            String fileName = getDoPath(folder) + retFileName;
+    /**
+     * @description 文件路径上传文件,默认不带domain
+     * @param filePath 文件路径
+     * @param folder oss文件夹
+     * @return
+     */
+    @Override
+    public String fileUpload(String filePath, String folder) {
+        return fileUpload(filePath, folder, false);
+    }
 
-            try {
-                InputStream inStream = file.getInputStream();
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                if (picFiles.contains(fileType.toLowerCase())) {
-                    objectMetadata.setContentType(PIC_CONTENT_TYPE);
-                }
-
-                if (pdfFiles.contains(fileType.toLowerCase())) {
-                    objectMetadata.setContentType(PDF_CONTENT_TYPE);
-                }
-
-                log.info("bucketName=" + properties.getBucketName());
-                log.info("fileName=" + fileName);
-                log.info("inStream is null =" + inStream.available());
-                log.info("objectMetadata=" + objectMetadata.getContentType());
-                PutObjectResult putResult = ossClient.putObject(properties.getBucketName(), fileName, inStream, objectMetadata);
-                if (StringUtils.isEmpty(putResult.getETag())) {
-                    throw new RuntimeException("---------------文件:" + fileName + "上传失败");
-                } else {
-                    return fileName;
-                }
-            } catch (Exception var9) {
-                log.error("上传图片失败:", var9);
-                return null;
-            }
-        } else {
+    /**
+     * @description 文件路径上传文件
+     * @param filePath 文件路径
+     * @param folder oss文件夹
+     * @param isWithDomain 是否带domain的完整路径
+     * @return
+     */
+    @Override
+    public String fileUpload(String filePath, String folder, boolean isWithDomain) {
+        if(StringUtils.isEmpty(filePath) || StringUtils.isEmpty(folder)){
+            log.error("[filePath] or [folder] must not be empty");
             return null;
+        }else{
+            String fileType = getFileType(filePath);
+            if(!typeFiles.contains(fileType)){
+                log.error("upload file type not be supported");
+                return null;
+            }else{
+                String retFileName = getFileName(folder, fileType);
+                String fileName = getDoPath(folder) + retFileName;
+                try {
+                    File file = new File(filePath);
+                    if(!file.exists() || file.isDirectory()){
+                        log.error("upload file is not exists or is a directory");
+                        return null;
+                    }else{
+                        return baseFileUpload(new FileInputStream(file), fileName, fileType, isWithDomain);
+                    }
+
+                } catch (FileNotFoundException e) {
+                    log.error("file [{}] upload fail", fileName, e);
+                    return null;
+                }
+            }
+        }
+    }
+
+    /**
+     * @description 上传文件,默认不带domain
+     * @auth sunpeikai
+     * @param file 文件
+     * @param folder oss文件夹
+     * @return
+     */
+    @Override
+    public String fileUpload(File file, String folder) {
+        return fileUpload(file, folder, false);
+    }
+
+    /**
+     * @description 上传文件
+     * @auth sunpeikai
+     * @param file 文件
+     * @param folder oss文件夹
+     * @param isWithDomain 是否带domain的完整路径
+     * @return
+     */
+    @Override
+    public String fileUpload(File file, String folder, boolean isWithDomain){
+        if(file == null){
+            log.error("upload file must not be null");
+            return null;
+        }else{
+            if(!file.exists() || file.isDirectory()){
+                log.error("upload file is not exists or is a directory");
+                return null;
+            }else{
+                String name = file.getName();
+                if(StringUtils.isEmpty(name)){
+                    log.error("upload file name must not be empty");
+                    return null;
+                }else{
+                    String fileType = getFileType(name);
+                    if(!typeFiles.contains(fileType)){
+                        log.error("upload file type not be supported");
+                        return null;
+                    }else{
+                        // 生成文件名
+                        String retFileName = getFileName(folder, fileType);
+                        // 生成doc/doc_1234567890.docx
+                        String fileName = getDoPath(folder) + retFileName;
+                        try {
+                            return baseFileUpload(new FileInputStream(file), fileName, fileType, isWithDomain);
+                        } catch (Exception e) {
+                            log.error("file [{}] upload fail {}", fileName, e);
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @description 上传文件,默认不带domain
+     * @auth sunpeikai
+     * @param file 文件
+     * @param folder oss文件夹
+     * @return
+     */
+    @Override
+    public String fileUpload(MultipartFile file, String folder) {
+        return fileUpload(file, folder, false);
+    }
+
+    /**
+     * @description 上传文件
+     * @auth sunpeikai
+     * @param file 文件
+     * @param folder oss文件夹
+     * @param isWithDomain 是否带domain的完整路径
+     * @return
+     */
+    @Override
+    public String fileUpload(MultipartFile file, String folder, boolean isWithDomain) {
+        if(file == null){
+            log.error("upload file must not be null");
+            return null;
+        }else{
+            String originalFilename = file.getOriginalFilename();
+            if(StringUtils.isEmpty(originalFilename)){
+                log.error("upload file name must not be empty");
+                return null;
+            }else{
+                String fileType = getFileType(originalFilename);
+                if(!typeFiles.contains(fileType)){
+                    log.error("upload file type not be supported");
+                    return null;
+                }else{
+                    // 生成文件名
+                    String retFileName = getFileName(folder, fileType);
+                    // 生成doc/doc_1234567890.docx
+                    String fileName = getDoPath(folder) + retFileName;
+                    try {
+                        return baseFileUpload(file.getInputStream(), fileName, fileType, isWithDomain);
+                    } catch (Exception e) {
+                        log.error("file [{}] upload fail {}", fileName, e);
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @description 文件流上传OSS,默认不带domain
+     * @auth sunpeikai
+     * @param inputStream 文件流
+     * @param folder oss文件夹
+     * @param fileType 文件类型
+     * @return
+     */
+    @Override
+    public String fileUpload(InputStream inputStream, String folder, String fileType) {
+        return fileUpload(inputStream, folder, fileType, false);
+    }
+
+    /**
+     * @description 文件流上传OSS
+     * @auth sunpeikai
+     * @param inputStream 文件流
+     * @param folder oss文件夹
+     * @param fileType 文件类型
+     * @param isWithDomain 是否带domain的完整路径
+     * @return
+     */
+    @Override
+    public String fileUpload(InputStream inputStream, String folder, String fileType, boolean isWithDomain){
+        // 生成文件名
+        String retFileName = getFileName(folder, fileType);
+        String fileName = getDoPath(folder) + retFileName;
+        return baseFileUpload(inputStream, fileName, fileType, isWithDomain);
+    }
+
+    /**
+     * @description 基础文件上传方法
+     * @auth sunpeikai
+     * @param inputStream 文件输入流
+     * @param fileName 文件名
+     * @param fileType 文件类型
+     * @param isWithDomain 是否包含完整domain路径
+     * @return
+     */
+    private String baseFileUpload(InputStream inputStream, String fileName, String fileType, boolean isWithDomain){
+        try{
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            if (picFiles.contains(fileType)) {
+                objectMetadata.setContentType(PIC_CONTENT_TYPE);
+            }
+            if (pdfFiles.contains(fileType)) {
+                objectMetadata.setContentType(PDF_CONTENT_TYPE);
+            }
+            PutObjectResult putResult = ossClient.putObject(properties.getBucketName(), fileName, inputStream, objectMetadata);
+            if (StringUtils.isEmpty(putResult.getETag())) {
+                throw new RuntimeException("eTag is empty");
+            } else {
+                return isWithDomain ? getPathWithDomain(fileName) : fileName;
+            }
+        }catch (Exception e){
+            log.error("file [{}] upload fail {}", fileName, e);
+            return null;
+        }finally {
+            if (inputStream != null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    log.error("inputStream close fail");
+                }
+            }
         }
     }
 }

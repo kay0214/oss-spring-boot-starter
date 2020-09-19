@@ -6,6 +6,7 @@ package com.personal.oss.aliyun.configure;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.personal.oss.aliyun.properties.AliyunOssProperties;
+import com.personal.oss.base.BaseConfiguration;
 import com.personal.oss.base.OssFactory;
 import com.personal.oss.enums.OssCompanyEnum;
 import com.personal.oss.properties.OssProperties;
@@ -30,7 +31,7 @@ import org.springframework.util.StringUtils;
 @ConditionalOnClass({OSS.class})
 @EnableConfigurationProperties({OssProperties.class,AliyunOssProperties.class})
 @ConditionalOnProperty(name = {"oss.aliyun.enable"}, havingValue = "true")
-public class AliyunOSSAutoConfiguration {
+public class AliyunOSSAutoConfiguration extends BaseConfiguration {
     private final AliyunOssProperties aliyunOssProperties;
 
     public AliyunOSSAutoConfiguration(OssProperties ossProperties) {
@@ -42,8 +43,7 @@ public class AliyunOSSAutoConfiguration {
         Assert.isTrue(!StringUtils.isEmpty(this.aliyunOssProperties.getEndpoint()), "endpoint can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.aliyunOssProperties.getAccessKey()), "Access key can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.aliyunOssProperties.getSecretKey()), "Secret key can't be empty.");
-        OssFactory.checkSingleton();
-        OssFactory.thisCompany = OssCompanyEnum.ALIYUN;
+        super.checkAndSwitch(OssCompanyEnum.ALIYUN);
         if(StringUtils.isEmpty(this.aliyunOssProperties.getSecurityToken())){
             // AK_SK mode
             return new OSSClientBuilder().build(this.aliyunOssProperties.getEndpoint(), this.aliyunOssProperties.getAccessKey(), this.aliyunOssProperties.getSecretKey());
