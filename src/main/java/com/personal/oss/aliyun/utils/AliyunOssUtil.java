@@ -7,7 +7,7 @@ import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
-import com.personal.oss.base.BaseOssUtil;
+import com.personal.oss.base.OssBase;
 import com.personal.oss.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import java.util.Date;
  * @version AliyunOssUtil, v0.1 2020/9/18 09:40
  * @description
  */
-public class AliyunOssUtil extends BaseOssUtil {
+public class AliyunOssUtil extends OssBase {
     private static final Logger log = LoggerFactory.getLogger(AliyunOssUtil.class);
     private static final OSS ossClient = SpringUtils.getBean(OSS.class);
 

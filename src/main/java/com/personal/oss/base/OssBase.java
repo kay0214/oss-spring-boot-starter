@@ -11,10 +11,10 @@ import java.util.List;
 
 /**
  * @author sunpeikai
- * @version BaseOssUtil, v0.1 2020/9/18 11:23
+ * @version OssBase, v0.1 2020/9/18 11:23
  * @description
  */
-public class BaseOssUtil {
+public class OssBase implements OssInterface{
     protected static final List<String> typeFiles = Arrays.asList(".gif", ".jpeg", ".png", ".jpg", ".tif", ".bmp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".apk");
     protected static final List<String> picFiles = Arrays.asList(".gif", ".jpeg", ".png", ".jpg", ".tif", ".bmp");
     protected static final List<String> pdfFiles = Arrays.asList(".pdf");

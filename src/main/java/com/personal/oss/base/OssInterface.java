@@ -5,8 +5,9 @@ package com.personal.oss.base;
 
 /**
  * @author sunpeikai
- * @version OssService, v0.1 2020/9/18 09:32
+ * @version OssInterface, v0.1 2020/9/18 17:30
  * @description
  */
-public interface OssService {
+public interface OssInterface {
+
 }

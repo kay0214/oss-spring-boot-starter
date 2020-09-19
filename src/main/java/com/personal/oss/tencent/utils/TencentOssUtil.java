@@ -3,7 +3,7 @@
  */
 package com.personal.oss.tencent.utils;
 
-import com.personal.oss.base.BaseOssUtil;
+import com.personal.oss.base.OssBase;
 import com.personal.oss.utils.SpringUtils;
 import com.qcloud.cos.COSClient;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * @version TencentOssUtil, v0.1 2020/9/18 15:48
  * @description
  */
-public class TencentOssUtil extends BaseOssUtil {
+public class TencentOssUtil extends OssBase {
     private static final Logger log = LoggerFactory.getLogger(TencentOssUtil.class);
     private static final COSClient cosClient = SpringUtils.getBean(COSClient.class);
 
