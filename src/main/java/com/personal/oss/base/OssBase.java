@@ -16,9 +16,9 @@ import java.util.List;
  * @description
  */
 public class OssBase{
-    protected static final List<String> typeFiles = Arrays.asList(".gif", ".jpeg", ".png", ".jpg", ".tif", ".bmp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".apk");
-    protected static final List<String> picFiles = Arrays.asList(".gif", ".jpeg", ".png", ".jpg", ".tif", ".bmp");
-    protected static final List<String> pdfFiles = Arrays.asList(".pdf");
+    protected static final List<String> typeFiles = Arrays.asList("gif", "jpeg", "png", "jpg", "tif", "bmp", "pdf", "doc", "docx", "xls", "xlsx", "apk");
+    protected static final List<String> picFiles = Arrays.asList("gif", "jpeg", "png", "jpg", "tif", "bmp");
+    protected static final List<String> pdfFiles = Arrays.asList("pdf");
     protected static final String PIC_CONTENT_TYPE = "image/jpg";
     protected static final String PDF_CONTENT_TYPE = "application/pdf";
     protected static final OssProperties properties = SpringUtils.getBean(OssProperties.class);
@@ -34,8 +34,9 @@ public class OssBase{
         if (StringUtils.isEmpty(fileName)){
             return "";
         }else{
-            String folder = fileName.substring(0, fileName.lastIndexOf("_"));
-            return properties.getDomain() + "/" + folder + "/" + fileName;
+            String shortName = fileName.substring(fileName.lastIndexOf("/"));
+            String folder = shortName.substring(0, shortName.lastIndexOf("_"));
+            return properties.getDomain() + "/" + folder + "/" + shortName;
         }
     }
 
