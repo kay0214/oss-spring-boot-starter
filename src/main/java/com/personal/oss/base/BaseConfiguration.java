@@ -19,7 +19,7 @@ public class BaseConfiguration {
 
     protected synchronized void checkAndSwitch(OssCompanyEnum companyEnum){
         Assert.isTrue(thisCompany == null, "only one company cloud be supported");
-        log.info("company [{}] init ok", companyEnum);
+        log.info("[{}] oss init ok", companyEnum);
         thisCompany = companyEnum;
     }
 }
