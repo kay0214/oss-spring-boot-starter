@@ -34,7 +34,7 @@ public class OssBase{
         if (StringUtils.isEmpty(fileName)){
             return "";
         }else{
-            String shortName = fileName.substring(fileName.lastIndexOf("/"));
+            String shortName = getShortName(fileName);
             String folder = shortName.substring(0, shortName.lastIndexOf("_"));
             return properties.getDomain() + "/" + folder + "/" + shortName;
         }
@@ -52,13 +52,23 @@ public class OssBase{
 
     //**********          对外界来说没用的方法          **********//
     /**
-     * @description 获取到短文件名称 doc_1234567890.docx
+     * @description 获取短文件名称 doc_1234567890.docx
+     * @auth sunpeikai
+     * @param fileName 文件名称 doc/doc_1234567890.docx
+     * @return doc_1234567890.docx
+     */
+    protected static String getShortName(String fileName){
+        return fileName.substring(fileName.lastIndexOf("/") + 1);
+    }
+
+    /**
+     * @description 生成短文件名称 doc_1234567890.docx
      * @auth sunpeikai
      * @param folder oss文件夹
      * @param fileType 文件类型
      * @return
      */
-    public String getFileName(String folder, String fileType) {
+    protected String getFileName(String folder, String fileType) {
         String type = ".".equals(fileType.substring(0, 1)) ? fileType : "." + fileType;
         return folder + "_" + System.currentTimeMillis() + type;
     }
@@ -69,7 +79,7 @@ public class OssBase{
      * @param folder oss文件夹
      * @return
      */
-    public String getDoPath(String folder) {
+    protected String getDoPath(String folder) {
         folder = folder.replace("\\", "/");
         String lastChar = folder.substring(folder.length() - 1);
         String firstChar = folder.substring(0, 1);

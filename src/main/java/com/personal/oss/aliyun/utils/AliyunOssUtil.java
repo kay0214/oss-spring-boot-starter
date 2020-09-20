@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
 
 import java.io.*;
 import java.util.Date;
@@ -83,6 +84,40 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
         }
     }
 
+    @Override
+    public String fileUpload(String base64, String folder, String fileType) {
+        return fileUpload(base64, folder, fileType, false);
+    }
+
+    @Override
+    public String fileUpload(String base64, String folder, String fileType, boolean isWithDomain) {
+        if(StringUtils.isEmpty(base64)){
+            log.error("file base64 code must not be empty");
+            return null;
+        }else{
+            if(StringUtils.isEmpty(folder) || StringUtils.isEmpty(fileType)){
+                log.error("folder or fileType must not be empty");
+                return null;
+            }else{
+                if(!typeFiles.contains(fileType)){
+                    log.error("upload file type not be supported");
+                    return null;
+                }else{
+                    // 参数处理 - 去掉base64的头data:image/png;base64,
+                    base64 = base64.contains(",") ? base64.substring(base64.indexOf(",") + 1) : base64;
+                    String retFileName = getFileName(folder, fileType);
+                    String fileName = getDoPath(folder) + retFileName;
+                    try{
+                        return baseFileUpload(new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(base64)),fileName,fileType,isWithDomain);
+                    }catch (Exception e){
+                        log.error("file [{}] upload fail", fileName, e);
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * @description 上传文件,默认不带domain
      * @auth sunpeikai
@@ -105,8 +140,8 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
      */
     @Override
     public String fileUpload(File file, String folder, boolean isWithDomain){
-        if(file == null){
-            log.error("upload file must not be null");
+        if(file == null || StringUtils.isEmpty(folder)){
+            log.error("upload file or folder must not be null");
             return null;
         }else{
             if(!file.exists() || file.isDirectory()){
@@ -161,8 +196,8 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
      */
     @Override
     public String fileUpload(MultipartFile file, String folder, boolean isWithDomain) {
-        if(file == null){
-            log.error("upload file must not be null");
+        if(file == null || StringUtils.isEmpty(folder)){
+            log.error("upload file or folder must not be null");
             return null;
         }else{
             String originalFilename = file.getOriginalFilename();
@@ -214,10 +249,20 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
      */
     @Override
     public String fileUpload(InputStream inputStream, String folder, String fileType, boolean isWithDomain){
-        // 生成文件名
-        String retFileName = getFileName(folder, fileType);
-        String fileName = getDoPath(folder) + retFileName;
-        return baseFileUpload(inputStream, fileName, fileType, isWithDomain);
+        if(StringUtils.isEmpty(folder) || StringUtils.isEmpty(fileType)){
+            log.error("[folder] or [fileType] must not be empty");
+            return null;
+        }else{
+            if(!typeFiles.contains(fileType)){
+                log.error("upload file type not be supported");
+                return null;
+            }else{
+                // 生成文件名
+                String retFileName = getFileName(folder, fileType);
+                String fileName = getDoPath(folder) + retFileName;
+                return baseFileUpload(inputStream, fileName, fileType, isWithDomain);
+            }
+        }
     }
 
     /**
@@ -242,7 +287,7 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
             if (StringUtils.isEmpty(putResult.getETag())) {
                 throw new RuntimeException("eTag is empty");
             } else {
-                return isWithDomain ? getPathWithDomain(fileName) : fileName;
+                return isWithDomain ? getPathWithDomain(fileName) : getShortName(fileName);
             }
         }catch (Exception e){
             log.error("file [{}] upload fail {}", fileName, e);

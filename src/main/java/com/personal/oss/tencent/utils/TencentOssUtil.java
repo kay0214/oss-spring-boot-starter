@@ -35,6 +35,16 @@ public class TencentOssUtil extends OssBase implements OssInterface {
     }
 
     @Override
+    public String fileUpload(String base64, String folder, String fileType) {
+        return "not implements";
+    }
+
+    @Override
+    public String fileUpload(String base64, String folder, String fileType, boolean isWithDomain) {
+        return "not implements";
+    }
+
+    @Override
     public String fileUpload(File file, String folder) {
         return "not implements";
     }

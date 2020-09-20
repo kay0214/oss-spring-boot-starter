@@ -14,8 +14,11 @@ import java.io.InputStream;
  * @description
  */
 public interface OssInterface {
+
     String fileUpload(String filePath, String folder);
     String fileUpload(String filePath, String folder, boolean isWithDomain);
+    String fileUpload(String base64,String folder, String fileType);
+    String fileUpload(String base64,String folder, String fileType, boolean isWithDomain);
     String fileUpload(File file, String folder);
     String fileUpload(File file, String folder, boolean isWithDomain);
     String fileUpload(MultipartFile file, String folder);
