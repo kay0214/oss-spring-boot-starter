@@ -34,9 +34,7 @@ public class OssBase{
         if (StringUtils.isEmpty(fileName)){
             return "";
         }else{
-            String shortName = getShortName(fileName);
-            String folder = shortName.substring(0, shortName.lastIndexOf("_"));
-            return properties.getDomain() + "/" + folder + "/" + shortName;
+            return properties.getDomain() + "/" + getFileKey(fileName);
         }
     }
 
@@ -51,6 +49,21 @@ public class OssBase{
     }
 
     //**********          对外界来说没用的方法          **********//
+    /**
+     * @description 获取fileKey  doc/doc_1234567890.docx
+     * @auth sunpeikai
+     * @param fileName 文件名doc_1234567890.docx
+     * @return
+     */
+    protected static String getFileKey(String fileName){
+        if(StringUtils.isEmpty(fileName)){
+            return "";
+        }else{
+            String shortName = getShortName(fileName);
+            String folder = shortName.substring(0, shortName.lastIndexOf("_"));
+            return folder + "/" + shortName;
+        }
+    }
     /**
      * @description 获取短文件名称 doc_1234567890.docx
      * @auth sunpeikai

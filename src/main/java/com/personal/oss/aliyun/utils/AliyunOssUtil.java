@@ -3,7 +3,6 @@
  */
 package com.personal.oss.aliyun.utils;
 
-import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
@@ -18,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 
 import java.io.*;
-import java.util.Date;
 
 /**
  * @author sunpeikai
@@ -29,11 +27,71 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
     private static final Logger log = LoggerFactory.getLogger(AliyunOssUtil.class);
     private static final OSS ossClient = SpringUtils.getBean(OSS.class);
 
-    public static void fileDownload(String fileKey, String fileDownloadPath) throws IOException {
-        InputStream inputStream = ossClient.getObject(properties.getBucketName(), fileKey).getObjectContent();
-        StreamUtils.copy(inputStream, new FileOutputStream(fileDownloadPath));
-        log.info(ossClient.generatePresignedUrl(properties.getBucketName(), fileKey, new Date(System.currentTimeMillis() + 30000L), HttpMethod.GET).toString());
-        ossClient.shutdown();
+    /**
+     * @description 下载文件到指定路径
+     * 下载路径中可以带文件名,例如C:\Users\dell\Desktop\doc_1600583438497.jpg
+     * 也可以不带文件名,例如C:\Users\dell\Desktop\
+     * @auth sunpeikai
+     * @param fileName 文件名
+     * @param filePath 下载路径
+     * @return
+     */
+    @Override
+    public void fileDownload(String fileName, String filePath) {
+        if(StringUtils.isEmpty(filePath)){
+            log.error("file download path must not be empty");
+        }else{
+            InputStream inputStream = fileDownload(fileName);
+            FileOutputStream outputStream = null;
+            if(inputStream != null){
+                try{
+                    File file = new File(filePath);
+                    if(file.isDirectory()){
+                        // 如果是个目录 - 就在filePath加上fileName
+                        outputStream = new FileOutputStream(filePath + File.separator + fileName);
+                    }else if(!file.isDirectory() && !file.exists()){
+                        outputStream = new FileOutputStream(file);
+                    }else{
+                        log.error("file path is not a directory or exists already");
+                        return;
+                    }
+                    StreamUtils.copy(inputStream, outputStream);
+                    outputStream.flush();
+                }catch (Exception e){
+                    log.error("file [{}] download fail {}", fileName, e);
+                }finally {
+                    // 先关闭输出流,再关闭输入流
+                    if(outputStream != null){
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {
+                            log.error("outputStream close fail");
+                        }
+                    }
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        log.error("inputStream close fail");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @description 下载文件到输入流
+     * @auth sunpeikai
+     * @param fileName 文件名
+     * @return InputStream 输入流
+     */
+    @Override
+    public InputStream fileDownload(String fileName) {
+        if(StringUtils.isEmpty(fileName)){
+            log.error("file name must not be empty");
+            return null;
+        }else{
+            return ossClient.getObject(properties.getBucketName(), getFileKey(fileName)).getObjectContent();
+        }
     }
 
     /**
@@ -84,11 +142,28 @@ public class AliyunOssUtil extends OssBase implements OssInterface {
         }
     }
 
+    /**
+     * @description base64 文件上传,默认不带domain
+     * @auth sunpeikai
+     * @param base64 文件的base64码
+     * @param folder oss文件夹
+     * @param fileType 文件类型
+     * @return
+     */
     @Override
     public String fileUpload(String base64, String folder, String fileType) {
         return fileUpload(base64, folder, fileType, false);
     }
 
+    /**
+     * @description base64 文件上传,默认不带domain
+     * @auth sunpeikai
+     * @param base64 文件的base64码
+     * @param folder oss文件夹
+     * @param fileType 文件类型
+     * @param isWithDomain 是否带domain的完整路径
+     * @return
+     */
     @Override
     public String fileUpload(String base64, String folder, String fileType, boolean isWithDomain) {
         if(StringUtils.isEmpty(base64)){
