@@ -16,6 +16,7 @@ public class TencentOssProperties {
     private String region;
     private String accessKey;
     private String secretKey;
+    private String securityToken;
 
     public boolean isEnable() {
         return enable;
@@ -47,5 +48,13 @@ public class TencentOssProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public String getSecurityToken() {
+        return securityToken;
+    }
+
+    public void setSecurityToken(String securityToken) {
+        this.securityToken = securityToken;
     }
 }

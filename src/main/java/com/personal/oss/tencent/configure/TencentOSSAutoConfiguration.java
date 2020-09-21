@@ -4,7 +4,6 @@
 package com.personal.oss.tencent.configure;
 
 import com.personal.oss.base.BaseConfiguration;
-import com.personal.oss.base.OssFactory;
 import com.personal.oss.enums.OssCompanyEnum;
 import com.personal.oss.properties.OssProperties;
 import com.personal.oss.tencent.properties.TencentOssProperties;
@@ -12,7 +11,7 @@ import com.personal.oss.utils.SpringUtils;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
-import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.auth.BasicSessionCredentials;
 import com.qcloud.cos.region.Region;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -47,9 +46,12 @@ public class TencentOSSAutoConfiguration extends BaseConfiguration {
         Assert.isTrue(!StringUtils.isEmpty(this.tencentOssProperties.getAccessKey()), "Access key can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.tencentOssProperties.getSecretKey()), "Secret key can't be empty.");
         super.checkAndSwitch(OssCompanyEnum.TENCENT);
-        COSCredentials credentials = new BasicCOSCredentials(this.tencentOssProperties.getAccessKey(), this.tencentOssProperties.getSecretKey());
-        Region region = new Region(this.tencentOssProperties.getRegion());
-        ClientConfig config = new ClientConfig(region);
-        return new COSClient(credentials,config);
+        if(StringUtils.isEmpty(this.tencentOssProperties.getSecurityToken())){
+            // AK_SK mode
+            return new COSClient(new BasicCOSCredentials(this.tencentOssProperties.getAccessKey(), this.tencentOssProperties.getSecretKey()), new ClientConfig(new Region(this.tencentOssProperties.getRegion())));
+        }else{
+            // STS mode
+            return new COSClient(new BasicSessionCredentials(this.tencentOssProperties.getAccessKey(), this.tencentOssProperties.getSecretKey(), this.tencentOssProperties.getSecurityToken()), new ClientConfig(new Region(this.tencentOssProperties.getRegion())));
+        }
     }
 }
