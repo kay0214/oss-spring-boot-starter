@@ -4,6 +4,7 @@
 package com.personal.oss.actuator;
 
 import com.aliyun.oss.OSSClient;
+import com.amazonaws.services.s3.AmazonS3;
 import com.personal.oss.utils.SpringUtils;
 import com.qcloud.cos.COSClient;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
@@ -53,6 +54,17 @@ public class OssActuatorEndpoint {
             ossProperties.put("beanName", beanName);
             ossProperties.put("region", client.getClientConfig().getRegion().getRegionName());
             ossProperties.put("bucketList", client.listBuckets().stream().map(com.qcloud.cos.model.Bucket::getName).toArray());
+            ossClientList.add(ossProperties);
+        });
+        // 京东云oss节点
+        Map<String, AmazonS3> jdcloudOSS = SpringUtils.getBeanOfType(AmazonS3.class);
+        size += jdcloudOSS.size();
+        jdcloudOSS.keySet().forEach(beanName ->{
+            Map<String, Object> ossProperties = new HashMap<>();
+            AmazonS3 client = jdcloudOSS.get(beanName);
+            ossProperties.put("beanName", beanName);
+            ossProperties.put("region", client.getRegionName());
+            ossProperties.put("bucketList", client.listBuckets().stream().map(com.amazonaws.services.s3.model.Bucket::getName).toArray());
             ossClientList.add(ossProperties);
         });
 

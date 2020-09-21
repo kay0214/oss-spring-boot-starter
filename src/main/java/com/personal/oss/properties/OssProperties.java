@@ -4,6 +4,7 @@
 package com.personal.oss.properties;
 
 import com.personal.oss.aliyun.properties.AliyunOssProperties;
+import com.personal.oss.jdcloud.properties.JdcloudOssProperties;
 import com.personal.oss.tencent.properties.TencentOssProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -18,6 +19,7 @@ public class OssProperties {
     private String domain;
     private AliyunOssProperties aliyun;
     private TencentOssProperties tencent;
+    private JdcloudOssProperties jdcloud;
 
     public String getBucketName() {
         return bucketName;
@@ -49,5 +51,13 @@ public class OssProperties {
 
     public void setTencent(TencentOssProperties tencent) {
         this.tencent = tencent;
+    }
+
+    public JdcloudOssProperties getJdcloud() {
+        return jdcloud;
+    }
+
+    public void setJdcloud(JdcloudOssProperties jdcloud) {
+        this.jdcloud = jdcloud;
     }
 }

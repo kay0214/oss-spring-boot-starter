@@ -4,6 +4,7 @@
 package com.personal.oss.base;
 
 import com.personal.oss.aliyun.utils.AliyunOssUtil;
+import com.personal.oss.jdcloud.utils.JdcloudOssUtil;
 import com.personal.oss.tencent.utils.TencentOssUtil;
 
 /**
@@ -17,6 +18,7 @@ public class OssFactory {
         switch (BaseConfiguration.thisCompany){
             case ALIYUN:return new AliyunOssUtil();
             case TENCENT:return new TencentOssUtil();
+            case JDCLOUD:return new JdcloudOssUtil();
             default:return null;
         }
     }

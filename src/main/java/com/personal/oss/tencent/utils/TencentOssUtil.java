@@ -54,6 +54,7 @@ public class TencentOssUtil extends OssBase {
             if (pdfFiles.contains(fileType)) {
                 objectMetadata.setContentType(PDF_CONTENT_TYPE);
             }
+            objectMetadata.setContentLength(inputStream.available());
             PutObjectResult putResult = cosClient.putObject(properties.getBucketName(), fileName, inputStream, objectMetadata);
             if (StringUtils.isEmpty(putResult.getETag())) {
                 throw new RuntimeException("eTag is empty");

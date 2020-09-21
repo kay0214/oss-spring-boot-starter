@@ -1,11 +1,11 @@
 /*
  * @Copyright: 2005-2018 www.hyjf.com. All rights reserved.
  */
-package com.personal.oss.aliyun.utils;
+package com.personal.oss.jdcloud.utils;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.model.ObjectMetadata;
-import com.aliyun.oss.model.PutObjectResult;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.personal.oss.base.OssBase;
 import com.personal.oss.utils.SpringUtils;
 import org.slf4j.Logger;
@@ -18,12 +18,12 @@ import java.io.InputStream;
 
 /**
  * @author sunpeikai
- * @version AliyunOssUtil, v0.1 2020/9/18 09:40
+ * @version JdcloudOssUtil, v0.1 2020/9/18 09:40
  * @description
  */
-public class AliyunOssUtil extends OssBase {
-    private static final Logger log = LoggerFactory.getLogger(AliyunOssUtil.class);
-    private static final OSS ossClient = SpringUtils.getBean(OSS.class);
+public class JdcloudOssUtil extends OssBase {
+    private static final Logger log = LoggerFactory.getLogger(JdcloudOssUtil.class);
+    private static final AmazonS3 ossClient = SpringUtils.getBean(AmazonS3.class);
 
     /**
      * @description 阿里云实现 - 基础文件下载方法

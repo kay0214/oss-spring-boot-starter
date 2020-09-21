@@ -3,6 +3,7 @@
 ### 目前支持：
 1. aliyun阿里云oss
 2. qcloud腾讯云cos
+3. jdcloud京东云oss
 ### 配置：
 oss:  
   &emsp;bucketName: personal  
@@ -18,6 +19,12 @@ oss:
     &emsp;&emsp;enable: false  
     &emsp;&emsp;access-key: 1234  
     &emsp;&emsp;region: qwe  
+    &emsp;&emsp;secret-key: 2345  
+  &emsp;jdcloud:  
+    &emsp;&emsp;#一个项目中只能有一个enable为true  
+    &emsp;&emsp;enable: false  
+    &emsp;&emsp;access-key: 1234  
+    &emsp;&emsp;endpoint: qwe  
     &emsp;&emsp;secret-key: 2345  
 ### 使用：
 ```

@@ -1,4 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.personal.oss.actuator.OssActuatorEndpointConfiguration,\
 com.personal.oss.aliyun.configure.AliyunOSSAutoConfiguration,\
-com.personal.oss.tencent.configure.TencentOSSAutoConfiguration
+com.personal.oss.tencent.configure.TencentOSSAutoConfiguration,\
+com.personal.oss.jdcloud.configure.JdcloudOSSAutoConfiguration

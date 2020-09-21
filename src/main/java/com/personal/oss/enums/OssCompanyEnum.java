@@ -9,5 +9,5 @@ package com.personal.oss.enums;
  * @description
  */
 public enum OssCompanyEnum {
-    ALIYUN,TENCENT
+    ALIYUN,TENCENT,JDCLOUD
 }
