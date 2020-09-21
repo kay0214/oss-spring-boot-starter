@@ -1,8 +1,8 @@
 #oss-spring-boot-starter
 ##目标：准备提供市面上各类对象存储的适配
 ###目前支持：
-#### 1. aliyun阿里云oss
-#### 2. qcloud腾讯云cos
+1. aliyun阿里云oss
+2. qcloud腾讯云cos
 ###配置：
 oss:  
   &emsp;bucketName: personal  
