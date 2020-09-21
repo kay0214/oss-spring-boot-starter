@@ -52,14 +52,12 @@
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>${aliyun.version}</version>
-            <optional>true</optional>
         </dependency>
         <!-- tencent cos -->
         <dependency>
             <groupId>com.qcloud</groupId>
             <artifactId>cos_api</artifactId>
             <version>${qcloud.version}</version>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
