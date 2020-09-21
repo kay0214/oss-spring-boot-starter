@@ -51,7 +51,7 @@ public class OssActuatorEndpoint {
             Map<String, Object> ossProperties = new HashMap<>();
             COSClient client = tencentOSS.get(beanName);
             ossProperties.put("beanName", beanName);
-            ossProperties.put("clientConfig", client.getClientConfig().toString());
+            ossProperties.put("region", client.getClientConfig().getRegion().getRegionName());
             ossProperties.put("bucketList", client.listBuckets().stream().map(com.qcloud.cos.model.Bucket::getName).toArray());
             ossClientList.add(ossProperties);
         });
