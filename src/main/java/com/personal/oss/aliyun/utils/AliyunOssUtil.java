@@ -25,13 +25,19 @@ public class AliyunOssUtil extends OssBase {
     private static final Logger log = LoggerFactory.getLogger(AliyunOssUtil.class);
     private static final OSS ossClient = SpringUtils.getBean(OSS.class);
 
+    /**
+     * @description 阿里云实现 - 基础文件下载方法
+     * @auth sunpeikai
+     * @param fileName 文件名称
+     * @return
+     */
     @Override
     protected InputStream baseFileDownload(String fileName) {
         return ossClient.getObject(properties.getBucketName(), getFileKey(fileName)).getObjectContent();
     }
 
     /**
-     * @description 基础文件上传方法
+     * @description 阿里云实现 - 基础文件上传方法
      * @auth sunpeikai
      * @param inputStream 文件输入流
      * @param fileName 文件名

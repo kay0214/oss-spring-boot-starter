@@ -24,11 +24,26 @@ public class TencentOssUtil extends OssBase {
     private static final Logger log = LoggerFactory.getLogger(TencentOssUtil.class);
     private static final COSClient cosClient = SpringUtils.getBean(COSClient.class);
 
+    /**
+     * @description 腾讯云实现 - 基础文件下载方法
+     * @auth sunpeikai
+     * @param fileName 文件名称
+     * @return
+     */
     @Override
     protected InputStream baseFileDownload(String fileName) {
         return cosClient.getObject(properties.getBucketName(), getFileKey(fileName)).getObjectContent();
     }
 
+    /**
+     * @description 腾讯云实现 - 基础文件上传方法
+     * @auth sunpeikai
+     * @param inputStream 文件输入流
+     * @param fileName 文件名
+     * @param fileType 文件类型
+     * @param isWithDomain 是否包含完整domain路径
+     * @return
+     */
     @Override
     protected String baseFileUpload(InputStream inputStream, String fileName, String fileType, boolean isWithDomain) {
         try{
