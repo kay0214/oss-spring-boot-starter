@@ -4,15 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <artifactId>mstdt-intergration</artifactId>
-        <groupId>com.mstdt.framework</groupId>
-        <version>1.1.0</version>
-    </parent>
-
     <groupId>com.personal</groupId>
     <artifactId>oss-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
+    <version>1.0.0</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <qcloud.version>5.6.28</qcloud.version>
+        <aliyun.version>3.11.0</aliyun.version>
+    </properties>
 
     <dependencies>
 
@@ -20,48 +23,51 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.version}</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring.boot.version}</version>
             <optional>true</optional>
         </dependency>
 
-        <!-- OSS -->
+        <!-- aliyun OSS -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
+            <version>${aliyun.version}</version>
+            <optional>true</optional>
         </dependency>
         <!-- tencent cos -->
         <dependency>
             <groupId>com.qcloud</groupId>
             <artifactId>cos_api</artifactId>
-            <version>5.6.28</version>
+            <version>${qcloud.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
             <optional>true</optional>
         </dependency>
-
-<!--        <dependency>
-            <groupId>com.mstdt.framework</groupId>
-            <artifactId>common-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>-->
 
     </dependencies>
     <repositories>
@@ -69,16 +75,6 @@
             <id>nexus-aliyun</id>
             <name>Nexus aliyun</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>nexus</id>
-            <name>Local Repo</name>
-            <url>http://10.10.2.100:18080/nexus-2.9.0/content/groups/public/</url>
-            <!--上海使用外网连接nexus私服，青岛使用内网 -->
-            <!--			<url>http://219.147.28.242:18080/nexus-2.9.0/content/groups/public/</url>-->
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -111,7 +107,6 @@
                     <configuration>
                         <finalName>${project.build.finalName}</finalName>
                     </configuration>
-
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -131,7 +126,7 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
+
 </project>
