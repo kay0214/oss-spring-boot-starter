@@ -15,6 +15,7 @@ import sun.misc.BASE64Decoder;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author sunpeikai
@@ -427,6 +428,11 @@ public abstract class OssBase implements OssInterface{
         }
     }
 
+    @Override
+    public Map<String, Object> healthInfo() {
+        return baseHealthInfo();
+    }
+
     /**
      * @description 基础文件下载方法
      * @auth sunpeikai
@@ -445,4 +451,11 @@ public abstract class OssBase implements OssInterface{
      * @return
      */
     protected abstract String baseFileUpload(InputStream inputStream, String fileName, String fileType, boolean isWithDomain);
+
+    /**
+     * @description 基础健康检查方法
+     * @auth sunpeikai
+     * @return
+     */
+    protected abstract Map<String, Object> baseHealthInfo();
 }

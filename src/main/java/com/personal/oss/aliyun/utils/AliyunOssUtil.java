@@ -4,6 +4,8 @@
 package com.personal.oss.aliyun.utils;
 
 import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.Bucket;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.personal.oss.base.OssBase;
@@ -14,6 +16,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -74,5 +78,17 @@ public class AliyunOssUtil extends OssBase {
                 }
             }
         }
+    }
+
+    @Override
+    protected Map<String, Object> baseHealthInfo() {
+        OSSClient ossClient = SpringUtils.getBean(OSSClient.class);;
+        Map<String, Object> result = new HashMap<>();
+        result.put("beanName", "ossClient");
+        result.put("endpoint", ossClient.getEndpoint().toString());
+        result.put("clientConfiguration", ossClient.getClientConfiguration());
+        result.put("credentials", ossClient.getCredentialsProvider().getCredentials());
+        result.put("bucketList", ossClient.listBuckets().stream().map(Bucket::getName).toArray());
+        return result;
     }
 }

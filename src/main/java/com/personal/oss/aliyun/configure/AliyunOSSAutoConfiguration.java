@@ -7,7 +7,6 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.personal.oss.aliyun.properties.AliyunOssProperties;
 import com.personal.oss.base.BaseConfiguration;
-import com.personal.oss.base.OssFactory;
 import com.personal.oss.enums.OssCompanyEnum;
 import com.personal.oss.properties.OssProperties;
 import com.personal.oss.utils.SpringUtils;
@@ -39,7 +38,7 @@ public class AliyunOSSAutoConfiguration extends BaseConfiguration {
     }
 
     @Bean
-    public OSS oss(){
+    public OSS ossClient(){
         Assert.isTrue(!StringUtils.isEmpty(this.aliyunOssProperties.getEndpoint()), "endpoint can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.aliyunOssProperties.getAccessKey()), "Access key can't be empty.");
         Assert.isTrue(!StringUtils.isEmpty(this.aliyunOssProperties.getSecretKey()), "Secret key can't be empty.");

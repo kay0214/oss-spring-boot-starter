@@ -19,7 +19,7 @@ public class OssFactory {
             case ALIYUN:return new AliyunOssUtil();
             case TENCENT:return new TencentOssUtil();
             case JDCLOUD:return new JdcloudOssUtil();
-            default:return null;
+            default:throw new IllegalArgumentException("factory assemble fail, oss init fail already");
         }
     }
 }

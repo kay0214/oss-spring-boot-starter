@@ -4,6 +4,7 @@
 package com.personal.oss.jdcloud.utils;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.personal.oss.base.OssBase;
@@ -14,6 +15,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -74,5 +77,15 @@ public class JdcloudOssUtil extends OssBase {
                 }
             }
         }
+    }
+
+    @Override
+    protected Map<String, Object> baseHealthInfo() {
+        Map<String, Object> result = new HashMap<>();
+        AmazonS3 amazonS3 = SpringUtils.getBean(AmazonS3.class);
+        result.put("beanName", "amazonS3");
+        result.put("region", amazonS3.getRegionName());
+        result.put("bucketList", amazonS3.listBuckets().stream().map(Bucket::getName).toArray());
+        return result;
     }
 }

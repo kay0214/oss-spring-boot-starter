@@ -6,6 +6,7 @@ package com.personal.oss.tencent.utils;
 import com.personal.oss.base.OssBase;
 import com.personal.oss.utils.SpringUtils;
 import com.qcloud.cos.COSClient;
+import com.qcloud.cos.model.Bucket;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectResult;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author sunpeikai
@@ -73,5 +76,15 @@ public class TencentOssUtil extends OssBase {
                 }
             }
         }
+    }
+
+    @Override
+    protected Map<String, Object> baseHealthInfo() {
+        Map<String, Object> result = new HashMap<>();
+        COSClient cosClient = SpringUtils.getBean(COSClient.class);
+        result.put("beanName", "cosClient");
+        result.put("region", cosClient.getClientConfig().getRegion().getRegionName());
+        result.put("bucketList", cosClient.listBuckets().stream().map(Bucket::getName).toArray());
+        return result;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author sunpeikai
@@ -130,4 +131,10 @@ public interface OssInterface {
      * @return
      */
     String fileUpload(InputStream inputStream, String folder, String fileType, boolean isWithDomain);
+
+    /**
+     * @description actuator监控需要的健康信息
+     * @auth sunpeikai
+     */
+    Map<String, Object> healthInfo();
 }
